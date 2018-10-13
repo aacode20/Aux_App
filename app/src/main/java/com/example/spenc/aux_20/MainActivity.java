@@ -15,6 +15,11 @@ import com.spotify.protocol.client.Subscription;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
+import com.spotify.protocol.client.CallResult;
+import com.spotify.protocol.client.Result;
+import java.util.concurrent.TimeUnit;
+import java.lang.String;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLIENT_ID = "172bb1fe694d4e21b6391329553a52fa";
@@ -89,8 +94,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleSendText(Intent intent){
-        String songName = intent.toString();
-        Toast.makeText(getApplicationContext(), songName, Toast.LENGTH_LONG).show();
-        //mSpotifyAppRemote.getPlayerApi().play("spotify:track:3JeT6Xcv6MlEHHylk8SKQ1");
+        String songName = parseSpotifyURI(intent);
+        //Send songName to database here
+    }
+
+    public String parseSpotifyURI(Intent intent){
+        String uri = intent.getClipData().toString();
+        String output = "spotify:track:";
+        //Verifying that user is sending a spotify element of type "track" (instead of album, playlist, etc.)
+            String [] dataType = uri.split("/", 6);
+            String type = dataType[4];
+            if(!type.equals("track")){
+                Toast.makeText(getApplicationContext(), "What you tried to queue isn't a song! Please try again", Toast.LENGTH_LONG).show();
+            }
+        //End of type check
+        int begin = uri.lastIndexOf("/") + 1;
+        int end = uri.length() - 3;
+        String sub = uri.substring(begin, end);
+        output+=sub;
+        //Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
+        return output;
     }
 }
