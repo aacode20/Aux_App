@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -17,6 +19,10 @@ import com.spotify.protocol.types.Track;
 
 import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.client.Result;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.lang.String;
 import java.security.SecureRandom;
@@ -72,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
                 handleSendText(intent);
             }
         }
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        //myRef.addValueEventListener(listener);
+
+        HashMap<String,Queue<String>> HostID =  new HashMap<>();
+        Queue<String> songs = new LinkedList<>();
+        songs.add("Despacito");
+        songs.add("Monkey");
+        HostID.put("12345", songs);
+        myRef.setValue(HostID);
+        System.out.println("");
     }
 
     @Override
