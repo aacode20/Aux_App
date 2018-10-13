@@ -19,12 +19,16 @@ import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.client.Result;
 import java.util.concurrent.TimeUnit;
 import java.lang.String;
+import java.security.SecureRandom;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLIENT_ID = "172bb1fe694d4e21b6391329553a52fa";
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
     private SpotifyAppRemote mSpotifyAppRemote;
+    private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static SecureRandom rnd = new SecureRandom();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,11 +99,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleSendText(Intent intent){
         String songName = parseSpotifyURI(intent);
+        //TODO: Check if songName is empty string, if true then do something else
         //Send songName to database here
     }
 
     public String parseSpotifyURI(Intent intent){
-        String uri = intent.getClipData().toString();
+
+        String uri;
+
+        //Checking for any exception when gathering data from intent, if
+        try {
+            uri = intent.getClipData().toString();
+        }
+        catch(Exception e){
+            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            return "";
+        }
         String output = "spotify:track:";
         //Verifying that user is sending a spotify element of type "track" (instead of album, playlist, etc.)
             String [] dataType = uri.split("/", 6);
@@ -114,5 +129,20 @@ public class MainActivity extends AppCompatActivity {
         output+=sub;
         //Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
         return output;
+    }
+
+    public String generateToken(int length){
+        //Would be used to generate unique n length alphanumeric string to identify 'parties'
+        //May want to consider string length for overlap/too hard to enter/etc..
+        /*
+        Usage would be:
+            while(token not in database)
+                token = generateToken(n);
+        */
+        StringBuilder stringBuilder = new StringBuilder(length);
+        for( int i = 0; i < length; i++ )
+            stringBuilder.append( stringBuilder.charAt( rnd.nextInt(stringBuilder.length()) ) );
+        return (stringBuilder.toString());
+
     }
 }
