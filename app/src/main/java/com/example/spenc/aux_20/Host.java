@@ -20,7 +20,7 @@ public class Host extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_host);
+        setContentView(R.layout.host_screen);
     }
 
     @Override
@@ -73,5 +73,17 @@ public class Host extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public String generateToken(){
+        //Would be used to generate unique n length alphanumeric string to identify 'parties'
+        //May want to consider string length for overlap/too hard to enter/etc..
+        /*
+        Usage would be:
+            while(token not in database)
+                token = generateToken(n);
+        */
+        int token = (int)(Math.random() * 10000) + 10000;
+        return Integer.toString(token);
     }
 }
