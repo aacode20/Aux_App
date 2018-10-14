@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.lang.String;
@@ -54,5 +55,16 @@ public class Join extends AppCompatActivity {
         output+=sub;
         //Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
         return output;
+    }
+
+    public void endActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        //CLOSE CONNECTION TO DATABASE
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
     }
 }

@@ -1,8 +1,10 @@
 package com.example.spenc.aux_20;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -86,4 +88,16 @@ public class Host extends AppCompatActivity {
         int token = (int)(Math.random() * 10000) + 10000;
         return Integer.toString(token);
     }
+
+    public void endActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        //CLOSE CONNECTION TO DATABASE
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
+    }
 }
+
