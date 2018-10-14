@@ -19,13 +19,9 @@ import java.util.Map;
 
 public class Join extends AppCompatActivity {
 
-    Bundle bundle = getIntent().getExtras();
-    private String hostID = bundle.getString("token");
-    //Toast.makeText(getApplicationContext(), hostID, Toast.LENGTH_LONG).show();
-
     private DatabaseReference database;
-    //private String hostID;
-    private HashMap<String, String> HostID = new HashMap<>();
+    private String hostID;
+
 
     private void configDummyDB(){
         HashMap<String,String> HostID =  new HashMap<>();
@@ -53,6 +49,7 @@ public class Join extends AppCompatActivity {
         setContentView(R.layout.join_screen);
         initDB();
         connectDB();
+        hostID = MainActivity.hostID;
     }
 
     @Override
@@ -73,9 +70,7 @@ public class Join extends AppCompatActivity {
 
     public void handleSendText(Intent intent){
         String songName = parseSpotifyURI(intent);
-        HostID.put("test ID", songName);
-        database.child("test ID").setValue(songName);
-        //database.setValue(songName);
+        database.child(hostID).setValue(songName);
     }
 
     public String parseSpotifyURI(Intent intent){
@@ -99,6 +94,7 @@ public class Join extends AppCompatActivity {
     public void endActivity(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         //CLOSE CONNECTION TO DATABASE
+        disconnectDB();
         startActivity(intent);
         finish();
     }
