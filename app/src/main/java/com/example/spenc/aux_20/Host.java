@@ -71,8 +71,9 @@ public class Host extends AppCompatActivity {
                 String song = (String) dataSnapshot.getValue();
                 if(song != null && !song.equals("")){
                     mSpotifyAppRemote.getPlayerApi().queue(song);
+                    database.child(dataSnapshot.getKey()).setValue("");
                 }
-                database.child(dataSnapshot.getKey()).setValue("");
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -137,7 +138,7 @@ public class Host extends AppCompatActivity {
 
     private void connected() {
         // Play a playlist
-        mSpotifyAppRemote.getPlayerApi().play("spotify:user:spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+        //mSpotifyAppRemote.getPlayerApi().play("spotify:user:spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
 
         // Subscribe to PlayerState
         mSpotifyAppRemote.getPlayerApi()
