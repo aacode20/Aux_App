@@ -27,10 +27,16 @@ public class Host extends AppCompatActivity {
 
     private static final String CLIENT_ID = "172bb1fe694d4e21b6391329553a52fa";
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
-    private SpotifyAppRemote mSpotifyAppRemote;
-    private DatabaseReference database;
-    private ValueEventListener listener;
-    private String hostID;
+    static private SpotifyAppRemote mSpotifyAppRemote;
+    static String hostID;
+    //private DatabaseReference database;
+    //private ValueEventListener listener;
+    //private String hostID;
+    Intent queueService;
+
+    public static void processSong(String song){
+        mSpotifyAppRemote.getPlayerApi().queue(song);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +45,22 @@ public class Host extends AppCompatActivity {
         TextView tokenField = (TextView) findViewById(R.id.tokenID);
         String token = generateToken();
         tokenField.setText(token);
-        initDB();
+        hostID = token;
+
+       /* initDB();
         connectDB();
         hostID = token;
         newHost(hostID);
-        addListener(hostID);
+        addListener(hostID);*/
+
+        queueService = new Intent(getApplicationContext(), QueueService.class);/*
+        queueService.putExtra("Token",token);
+        queueService.putExtra("Start",true);*/
+        //queueService.setAction("com.example.spenc.aux_20.QueueService");
+        startService(queueService);
     }
 
-    private void configDummyDB(){
+    /*private void configDummyDB(){
         HashMap<String,String> HostID =  new HashMap<>();
         HostID.put("12345", "Monkey");
         HostID.put("54321", "Test");
@@ -100,7 +114,7 @@ public class Host extends AppCompatActivity {
     private void disconnectDB(){
         DatabaseReference.goOffline();
     }
-
+*/
     @Override
     protected void onStart() {
         super.onStart();
@@ -170,9 +184,11 @@ public class Host extends AppCompatActivity {
 
     public void endActivity(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        removeHost(hostID);
+        /*removeHost(hostID);
         removeListener(hostID);
-        disconnectDB();
+        disconnectDB();*/
+        queueService.putExtra("Start",false);
+        stopService(queueService);
         //CLOSE CONNECTION TO DATABASE
         startActivity(intent);
         finish();
