@@ -1,11 +1,17 @@
 package com.example.spenc.aux_20;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -13,16 +19,80 @@ import com.spotify.protocol.client.Subscription;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
+import java.util.HashMap;
+
 public class Host extends AppCompatActivity {
 
     private static final String CLIENT_ID = "172bb1fe694d4e21b6391329553a52fa";
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
     private SpotifyAppRemote mSpotifyAppRemote;
+    private DatabaseReference database;
+    private ValueEventListener listener;
+    private String hostID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_screen);
+        initDB();
+        connectDB();
+        hostID = generateToken();
+        newHost(hostID);
+        addListener(hostID);
+    }
+
+    private void configDummyDB(){
+        HashMap<String,String> HostID =  new HashMap<>();
+        HostID.put("12345", "Monkey");
+        HostID.put("54321", "Test");
+        database.setValue(HostID);
+    }
+
+    private DatabaseReference newHost(String hostID){
+        DatabaseReference dbr = database.child(hostID);
+        dbr.setValue("");
+        return dbr;
+    }
+
+    private void removeHost(String hostID){
+        DatabaseReference dbr = database.child(hostID);
+        dbr.removeValue();
+    }
+
+    private void addListener(String hostID){
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String song = (String) dataSnapshot.getValue();
+                if(song != null && !song.equals("")){
+                    mSpotifyAppRemote.getPlayerApi().queue(song);
+                }
+                database.child(dataSnapshot.getKey()).setValue("");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to read value");
+            }
+        };
+        database.child(hostID).addValueEventListener(listener);
+    }
+
+    private void removeListener(String hostID){
+        if(database != null && listener != null){
+            database.child(hostID).removeEventListener(listener);
+        }
+    }
+
+    private void initDB(){
+        database = FirebaseDatabase.getInstance().getReference();
+    }
+
+    private void connectDB(){
+        DatabaseReference.goOnline();
+    }
+
+    private void disconnectDB(){
+        DatabaseReference.goOffline();
     }
 
     @Override
@@ -91,6 +161,9 @@ public class Host extends AppCompatActivity {
 
     public void endActivity(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        removeHost(hostID);
+        removeListener(hostID);
+        disconnectDB();
         //CLOSE CONNECTION TO DATABASE
         startActivity(intent);
         finish();

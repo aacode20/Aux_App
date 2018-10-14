@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String hostID;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please enter a valid 5 character party code!", Toast.LENGTH_LONG).show();
         }
         else {
+            hostID = str;
             Intent intent = new Intent(this, Join.class);
             startActivity(intent);
             finish();
@@ -33,6 +35,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-//Maybe handle send text here so that it reroutes
-
 }
