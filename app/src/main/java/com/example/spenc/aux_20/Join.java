@@ -13,11 +13,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.String;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Join extends AppCompatActivity {
 
     private DatabaseReference database;
     private String hostID;
+    private HashMap<String, String> HostID = new HashMap<>();
 
     private void configDummyDB(){
         HashMap<String,String> HostID =  new HashMap<>();
@@ -65,7 +68,9 @@ public class Join extends AppCompatActivity {
 
     public void handleSendText(Intent intent){
         String songName = parseSpotifyURI(intent);
-        //Send songName to database here
+        HostID.put("test ID", songName);
+        database.child("test ID").setValue(songName);
+        //database.setValue(songName);
     }
 
     public String parseSpotifyURI(Intent intent){
