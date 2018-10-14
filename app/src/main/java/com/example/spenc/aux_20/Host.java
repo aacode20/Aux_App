@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +22,7 @@ import com.spotify.protocol.types.Track;
 
 import java.util.HashMap;
 
+
 public class Host extends AppCompatActivity {
 
     private static final String CLIENT_ID = "172bb1fe694d4e21b6391329553a52fa";
@@ -34,9 +36,12 @@ public class Host extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_screen);
+        TextView tokenField = (TextView) findViewById(R.id.tokenID);
+        String token = generateToken();
+        tokenField.setText(token);
         initDB();
         connectDB();
-        hostID = generateToken();
+        hostID = token;
         newHost(hostID);
         addListener(hostID);
     }
@@ -155,7 +160,10 @@ public class Host extends AppCompatActivity {
             while(token not in database)
                 token = generateToken(n);
         */
-        int token = (int)(Math.random() * 10000) + 10000;
+        int token = 0;
+        while(token<9999){
+            token = (int) (Math.random() * 100000);
+        }
         return Integer.toString(token);
     }
 

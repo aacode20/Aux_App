@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             hostID = str;
             Intent intent = new Intent(this, Join.class);
             intent.putExtra("token", str);
+            intent.putExtra("Class", "B");
             startActivity(intent);
             finish();
         }

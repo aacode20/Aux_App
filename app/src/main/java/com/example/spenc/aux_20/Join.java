@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +22,6 @@ public class Join extends AppCompatActivity {
 
     private DatabaseReference database;
     private String hostID;
-
 
     private void configDummyDB(){
         HashMap<String,String> HostID =  new HashMap<>();
@@ -50,6 +50,8 @@ public class Join extends AppCompatActivity {
         initDB();
         connectDB();
         hostID = MainActivity.hostID;
+        TextView tokenField = (TextView) findViewById(R.id.tokenID);
+        tokenField.setText(hostID);
     }
 
     @Override
