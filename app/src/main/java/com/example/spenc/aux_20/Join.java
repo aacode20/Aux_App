@@ -7,14 +7,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.lang.String;
+import java.util.HashMap;
 
 public class Join extends AppCompatActivity {
+
+    private DatabaseReference database;
+    private String hostID;
+
+    private void configDummyDB(){
+        HashMap<String,String> HostID =  new HashMap<>();
+        HostID.put("12345", "Monkey");
+        HostID.put("54321", "Test");
+        database.setValue(HostID);
+    }
+
+    private void initDB(){
+        database = FirebaseDatabase.getInstance().getReference();
+    }
+
+    private void connectDB(){
+        DatabaseReference.goOnline();
+    }
+
+    private void disconnectDB(){
+        DatabaseReference.goOffline();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_screen);
+        initDB();
+        connectDB();
     }
 
     @Override
