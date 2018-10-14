@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -12,6 +13,8 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.client.Subscription;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
+
+
 
 public class Host extends AppCompatActivity {
 
@@ -23,6 +26,9 @@ public class Host extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_screen);
+        TextView tokenField = (TextView) findViewById(R.id.tokenID);
+        String token = generateToken();
+        tokenField.setText(token);
     }
 
     @Override
@@ -85,8 +91,9 @@ public class Host extends AppCompatActivity {
             while(token not in database)
                 token = generateToken(n);
         */
-        int token = (int)(Math.random() * 10000) + 10000;
+        int token = (int) (Math.random() * 100000);
         return Integer.toString(token);
+
     }
 
     public void endActivity(View view) {

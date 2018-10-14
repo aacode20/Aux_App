@@ -19,8 +19,12 @@ import java.util.Map;
 
 public class Join extends AppCompatActivity {
 
+    Bundle bundle = getIntent().getExtras();
+    private String hostID = bundle.getString("token");
+    //Toast.makeText(getApplicationContext(), hostID, Toast.LENGTH_LONG).show();
+
     private DatabaseReference database;
-    private String hostID;
+    //private String hostID;
     private HashMap<String, String> HostID = new HashMap<>();
 
     private void configDummyDB(){

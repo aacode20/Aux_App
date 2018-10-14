@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Intent intent = new Intent(this, Join.class);
+            intent.putExtra("token", str);
             startActivity(intent);
             finish();
         }
