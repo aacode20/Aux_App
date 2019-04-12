@@ -2,10 +2,6 @@
 
 Aux is an Android Application developed in AndroidStudio and integrated with Spotify that allows users in a group to share and add songs to a master queue hosted by any of the members. Aux leverages a Firebase database in order to send and receive songs information, namely Spotify URIs, between participants and the host in what is known as a "Party". Firebase allows for applications that use it to respond to changes to the database as they are notified once it does, in this case Aux will receive an update when a participant shares a song from Spotify to it. Finally, Aux parses a song when it is shared to and takes full advantage of the newly updated Spotify SDK for Android to add the song to the host's queue, ready to play.
 
-## Getting Started
-
-The application is still under development.
-
 ## Built With
 
 * [Spotify SDK for Android](https://developer.spotify.com/documentation/android/)
